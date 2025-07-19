@@ -1,0 +1,58 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+SignUp
+{% endblock title %}
+
+{% block body %}
+<span>SignUp</span>
+<form action="signup" method="post">
+		{% csrf_token %}
+		<label>Username:</label> <br />
+		{{form.user_name}} <br />
+		<div>
+				{% with user_name_errors=form.user_name.errors %}
+				{% if user_name_errors %}
+				{% for errors in user_name_errors %}
+				<span>{{errors}}</span>
+				{% endfor %}
+				{% endif %}
+				{% endwith %}
+		</div>
+		<label>Email</label> <br />
+		{{form.email}} <br />
+		<div>
+				{% with email_errors=form.email.errors %}
+				{% if email_errors %}
+				{% for errors in email_errors %}
+				<span>{{errors}}</span>
+				{% endfor %}
+				{% endif %}
+				{% endwith %}
+		</div>
+		<label>Password</label> <br />
+		{{form.password}} <br />
+		<div>
+				{% with password_errors=form.password.errors %}
+				{% if password_errors %}
+				{% for errors in password_errors %}
+				<span>{{errors}}</span>
+				{% endfor %}
+				{% endif %}
+				{% endwith %}
+		</div>
+		<label>Confirm Password</label> <br />
+		{{form.confirm_password}} <br />
+		<div>
+				{% with confirm_password_errors=form.confirm_password.errors %}
+				{% if confirm_password_errors %}
+				{% for errors in confirm_password_errors %}
+				<span>{{errors}}</span>
+				{% endfor %}
+				{% endif %}
+				{% endwith %}
+		</div>
+		<input type="submit" value="Sign Up" />
+</form>
+{% endblock body %}
+

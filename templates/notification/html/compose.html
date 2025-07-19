@@ -1,0 +1,15 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Compose
+{% endblock title %}
+
+{% block body %}
+<span>Compose a message to {{username}}</span> <br />
+<a href="{% url 'notification:chats' username %}">Back</a>
+<form action="{% url 'notification:compose' username %}" method="post">
+		{% csrf_token %}
+		{{form.text}}
+		<input type="submit" value="Send" />
+</form>
+{% endblock body %}

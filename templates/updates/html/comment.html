@@ -1,0 +1,27 @@
+{% extends "accounts/html/base.html" %}
+{% load updates %}
+
+{% block title %}
+Comments
+{% endblock title %}
+
+{% block body %}
+<span>Comments</span> <br />
+<a href="{% url 'updates:your_updates' %}">Back</a> <br />
+{% only_comments post as comments %}
+{% for comment in comments %}
+<div>
+		<a href="{% url 'notification:compose' comment.from_user.user_name %}">{{comment.from_user}}</a> <br />
+		{{comment.text}} <br />
+		{% if comment.replies.all %}
+		<a href="{% url 'updates:comment_replies' comment.id %}">{{comment.replies.all|length}} replies </a><br />
+		{% else %}
+		<a href="{% url 'updates:post_reply' comment.id %}">Reply</a>
+		{% endif %}
+		<hr />
+</div>
+{% empty %}
+<a href="{% url 'updates:post_comment' post.id %}">Leave a comment as {{user}}</a>
+{% endfor %}
+<a href="{% url 'updates:post_comment' post.id %}">Be the first to leave a comment as {{user}}</a>
+{% endblock body %}

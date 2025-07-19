@@ -1,0 +1,40 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Preference
+{% endblock title %}
+
+{% block body %}
+<span>Preferences</span>
+<form action="{% url 'accounts:profile' username %}" method="post">
+		{% csrf_token %}
+		<label>Username:</label> <br />
+		{{form.user_name}} <br />
+		<div>
+				{% with user_name_errors=form.user_name.errors %}
+				{% if user_name_errors %}
+				{% for errors in user_name_errors %}
+				<span>{{errors}}</span>
+				{% endfor %}
+				{% endif %}
+				{% endwith %}
+		</div>
+		<label>Email</label> <br />
+		{{form.email}} <br />
+		<div>
+				{% with email_errors=form.email.errors %}
+				{% if email_errors %}
+				{% for errors in email_errors %}
+				<span>{{errors}}</span>
+				{% endfor %}
+				{% endif %}
+				{% endwith %}
+		</div>
+		<input type="submit" value="Save Changes">
+		{% if user.is_admin %}
+		<a href="{% url 'notification:home' %}">Notifications</a>
+		{% endif %}
+</form>
+		<a href="{% url 'accounts:change_password' username %}">Change Password</a>
+  <a href="{% url 'accounts:logout' %}">Logout</a>
+{% endblock body %}

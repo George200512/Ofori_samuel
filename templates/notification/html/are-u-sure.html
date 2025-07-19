@@ -1,0 +1,11 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Delete Message
+{% endblock title %}
+
+{% block body %}
+<span>Are you sure you want to delete: '{{message.text}}' ?</span> <br />
+<a href="{% url 'notification:delete_done' message.id friend.user_name %}">Yes</a>
+<a href="{% url 'notification:chats' friend.user_name %}">No</a>
+{% endblock body %}

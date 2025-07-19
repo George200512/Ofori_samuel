@@ -1,0 +1,24 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Find My Account
+{% endblock title %}
+
+{% block body %}
+<span>Find my account.</span>
+<form action="{% url 'accounts:find_my_account' %}" method="post">
+		{% csrf_token %}
+		<label>Email or username</label> <br />
+		{{form.email_username}} <br />
+		<div>
+				{% with email_username_errors=form.email_username.errors %}
+				{% if email_username_errors %}
+				{% for error in email_username_errors %}
+				<span>{{error|linebreaks}}</span>
+				{% endfor %}
+				{% endif %}
+				{% endwith %}
+		</div>
+		<input type="submit" value="Search">
+</form> 
+{% endblock body %}

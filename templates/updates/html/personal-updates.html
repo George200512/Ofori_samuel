@@ -1,0 +1,31 @@
+{% extends "accounts/html/base.html" %}
+{% load updates %}
+
+{% block title %}
+My Updates
+{% endblock title %}
+
+{% block body %}
+<a href="{% url 'updates:home' %}">Back</a>
+<span>My Updates</span> <br />
+{% for post in user.posts.all %}
+{% only_comments post as comments %}
+<div>
+{{post.user}}<br /> 
+{% if post.expired %}
+		Expired <br />
+		{% else %}
+		Valid <br />
+		{% endif %}
+{{post.content}} <br />
+		<a href="{% url 'updates:comments' post.id %}">{{comments|length}} comments</a><br />
+		<a href="{% url 'updates:viewers' post.id %}">{{post.viewers.all|length}} viewers</a> <br />
+		<a href="{% url 'updates:are_you_sure' post.id %}">Delete</a> <br />
+		<a href="{% url 'updates:edit_post' post.id %}">Edit</a>
+</div>
+<hr />
+{% empty %}
+No post made
+<a href="{% url 'updates:post' %}">Add a post.</a>
+{% endfor %}
+{% endblock body %}

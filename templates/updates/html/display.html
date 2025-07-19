@@ -1,0 +1,23 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+My Updates
+{% endblock title %}
+
+{% block body %}
+<a href="{% url 'updates:home' %}">Back</a>
+<span>{{user}}'s Updates</span> <br />
+{% for post in valid_posts %}
+<div>
+{{post.user}}<br /> 
+{% if post.expired %}
+		Expired <br />
+		{% else %}
+		Valid <br />
+		{% endif %}
+{{post.content}} <br />
+		<a href="{% url 'updates:comments' post.id %}">{{post.comments.all|length}} comments</a><br />
+</div>
+<hr />
+{% endfor %}
+{% endblock body %}

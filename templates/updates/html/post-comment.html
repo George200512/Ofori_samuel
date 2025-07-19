@@ -1,0 +1,14 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Post Comment
+{% endblock title %}
+
+{% block body %}
+<span>Post comment</span>
+<form action="{% url 'updates:post_comment' post.id %}" method="post">
+		{% csrf_token %}
+		{{form.text}}
+		<input type="submit" value="Send">
+</form>
+{% endblock body %}

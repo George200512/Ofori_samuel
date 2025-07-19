@@ -1,0 +1,11 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Delete Successful
+{% endblock title %}
+
+{% block body %}
+<span>Post Successfully deleted</span> <br />
+<a href="{% url 'updates:your_updates' %}">Go Back</a>
+
+{% endblock body %}

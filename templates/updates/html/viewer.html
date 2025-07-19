@@ -1,0 +1,15 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Viewers
+{% endblock title %}
+
+{% block body %}
+<span>Viewers</span> <br />
+<a href="{% url 'updates:your_updates' %}"> Back</a> <br />
+{% for viewer in post.viewers.all %}
+<a href="{% url 'notification:compose' viewer.user.user_name %}">{{viewer.user}}</a><br /> <hr />
+{% empty %}
+No viewers yet
+{% endfor %}
+{% endblock body %}
