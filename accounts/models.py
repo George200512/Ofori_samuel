@@ -36,7 +36,11 @@ class User(AbstractBaseUser,  PermissionsMixin):
     email = models.EmailField("Email", unique=True)
     user_name = models.CharField(max_length=50, unique=True)
     date_added = models.DateTimeField(auto_now_add=True)
+<<<<<<< HEAD
     #profile_pic = models.ImageField(upload_to="images/user_pics", null=True,  blank=True)
+=======
+    profile_pic = models.ImageField(upload_to="images/user_pics", null=True,  blank=True)
+>>>>>>> e48fab8c5cf2e6a5d67df8b8e2fc3d8aa401390a
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     

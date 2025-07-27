@@ -3,8 +3,12 @@ from django.urls import path
 from.views import (
     Home, PersonalUpdates, Comments, Viewers,  MakePost,
     AreYouSure, DeletePost, DisplayUpdates, EditPost ,
+<<<<<<< HEAD
     PostComment, Reply,  ShowCommentReplies,
     PostReplyReply 
+=======
+    PostComment, Reply,  ShowCommentReplies
+>>>>>>> e48fab8c5cf2e6a5d67df8b8e2fc3d8aa401390a
     )
 
 app_name = "updates"
@@ -21,6 +25,10 @@ urlpatterns = [
     path("post/delete/<int:id>/",  EditPost. as_view(), name="edit_post"), 
     path("post-comment/<int:id>", PostComment. as_view(), name="post_comment"),
     path("post-comment-reply/<int:id>", Reply. as_view(), name="post_reply"),
+<<<<<<< HEAD
     path("comment-reply-show/<int:id>", ShowCommentReplies. as_view(), name="comment_replies"), 
     path("reply/<int:id>/reply-compose/",  PostReplyReply. as_view(), name="compose_replys_reply")
+=======
+    path("comment-reply-show/<int:id>", ShowCommentReplies. as_view(), name="comment_replies")
+>>>>>>> e48fab8c5cf2e6a5d67df8b8e2fc3d8aa401390a
 ]

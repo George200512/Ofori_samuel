@@ -3,7 +3,10 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.db.models.functions import Now
+<<<<<<< HEAD
 from django.views.generic import FormView
+=======
+>>>>>>> e48fab8c5cf2e6a5d67df8b8e2fc3d8aa401390a
 
 from accounts.models import User 
 from.models import Comment, Post, Viewer
@@ -221,6 +224,7 @@ class ShowCommentReplies(LoginRequiredMixin, View):
        """Get the comment with specified id and display the replies"""
        
        comment = Comment.objects.get(id=id)
+<<<<<<< HEAD
        return render(request, self.template_name, {"comment":comment})
        
        
@@ -244,3 +248,6 @@ class PostReplyReply(FormView):
         parent_reply.replies.add(reply)
         return 
         
+=======
+       return render(request, self.template_name, {"comment":comment})
+>>>>>>> e48fab8c5cf2e6a5d67df8b8e2fc3d8aa401390a
