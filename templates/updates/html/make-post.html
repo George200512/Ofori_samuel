@@ -1,0 +1,14 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Make A Post
+{% endblock title %}
+
+{% block body %}
+<span>Make a post</span>
+<form action="{% url 'updates:post' %}" method="post">
+		{% csrf_token %}
+		{{form}}
+		<input type="submit" value="Post" />
+</form>
+{% endblock body %}

@@ -1,0 +1,17 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Replies of a comment.
+{% endblock title %}
+
+{% block body %}
+<a href="{% url 'updates:comments' comment.id %}">Back</a>
+<span>Replies of a comment.</span> <br />
+{% for reply in comment.replies.all %}
+<a href="{% url 'notification:compose' reply.from_user.user_name %}">{{reply.from_user}}</a> <br />
+{{reply.text}} <br />
+<a href="#">{{reply.replies.all|length}}replies</a>
+{% empty %}
+<a href="{% url 'upddates:post_reply' comment.id %}">Be the first to reply.</a>
+{% endfor %}
+{% endblock body %}

@@ -1,0 +1,28 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Updates
+{% endblock title %}
+
+{% block body %}
+<span>Updates</span> <hr />
+<div>
+		<a href="{% url 'updates:your_updates' %}">
+		Me <br />
+				{% if user.posts.all|length == 1 %}
+		{{user.posts.all|length}} post available.
+				{% else %}
+				{{user.posts.all|length}} posts available.
+				{% endif %}
+				<hr />
+		</a>
+		<a href="{% url 'updates:post' %}">Add a post</a>
+</div>
+<span>Recent Updates</span> <hr /> <br>
+{% for updates in other_updates %}
+<a href="{% url 'updates:display_updates' updates.user_name %}">{{updates.user_name}}</p>
+<hr />
+{% empty %}
+No recent updates
+{% endfor %}
+{% endblock body %}

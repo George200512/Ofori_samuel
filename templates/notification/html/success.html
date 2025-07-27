@@ -1,0 +1,10 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Delete Successful
+{% endblock title %}
+
+{% block body %}
+<span>Message successfully deleted</span> <br />
+<a href="{% url 'notification:chats' friend.user_name %}">Go back</a>
+{% endblock body %}

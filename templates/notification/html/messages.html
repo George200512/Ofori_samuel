@@ -1,0 +1,29 @@
+{% extends "accounts/html/base.html" %}
+{% load utils %}
+
+{% block title %}
+Messages
+{% endblock title %}
+
+{% block body %}
+<span><a href="{% url 'notification:home' %}">&#8592;</a>Messages</span>
+{% for chat in my_chats %}
+		<div>
+				{% if chat.message.from_user != user %}
+<p>{{chat.message.from_user}}:</p>
+<p>{{chat.message.text}}</p>
+				<a href="{% url 'notification:delete_message' chat.message.id chat.message.from_user.user_name %}">Delete</a>
+				<hr />
+				{% else %}
+				<p>Me:</p>
+<p>{{chat.message.text}}</p>
+				<a href="{% url 'notification:delete_message' chat.message.id chat.message.to_user.user_name%}">Delete</a>
+				<hr />
+				{% endif %}
+		</div>
+{% empty %}
+<span>No Messages</span>
+{% endfor %}
+<a href="{% url 'notification:compose' friend %}">Compose A Message.</a>
+{% endblock body %}
+

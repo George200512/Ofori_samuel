@@ -1,0 +1,45 @@
+{% extends "accounts/html/base.html" %}
+{% load utils %}
+{% block title %}
+Chats
+{% endblock title %}
+
+{% block body %}
+<span>Chats</span>
+<form action="{% url 'notification:home' %}" method="post">
+		{% csrf_token %}
+		{{form.text}} <br />
+		<div>
+				{% with text_errors=form.text.errors %}
+				{% if text_errors %}
+				{% for errors in text_errors %}
+				<span>{{errors}}</span>
+				{% endfor %}
+				{% endif %}
+				{% endwith %}
+		</div>
+		<input type="Submit" value="Search">
+</form>
+
+<hr />
+
+<div>
+		{% for friend in my_friends %}
+		<div>
+				{% if friend != user %}
+		<a href="{% url 'notification:chats' friend %}">{{friend}}</a> <br />
+				<p>{% latest_message user friend %}</p>
+				<p>{{user|no_unread_messages:friend}}</p>
+				{% else %}
+				<a href="{% url 'notification:chats' friend %}">Me</a> <br />
+				<p>{% latest_message user friend %}</p>
+				<p>{{user|no_unread_messages:friend}}</p>
+				{% endif %}
+		</div>
+		<hr />
+		{% empty %}
+		<a href="{% url 'notification:compose' 'ofori_samuel' %}">Start a conversation with Ofori Samuel</a>
+		{% endfor %}
+</div>
+{% endblock body %}
+}

@@ -1,0 +1,39 @@
+
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Chats
+{% endblock title %}
+
+{% block body %}
+<span>Chats</span> <br />
+{% for chat in our_chats %}
+{% if chat.from_user != user %}
+<span>You:</span> <br />
+<span>{{chat.text}}</span> <br />
+{% else %}
+<span>{{chat.from_user.user_name}}:</span> <br />
+<span>{{chat.text}}</span> <br />
+{% endif %}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<!--{% if not chat.is_reply %}
+<span>{{chat.text}}</span> <br />
+{% else %}
+{% for reply in chat.replies.all %}
+<span>{{reply.text}}</span>
+{% endfor %}
+{% endif %}-->
+{% endfor %}
+{% endblock body %}

@@ -1,0 +1,10 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+User Found
+{% endblock title %}
+
+{% block body %}
+<span>User Found</span><br />
+<a href="{% url 'accounts:login' %}">{{username}}</a>
+{% endblock body %}

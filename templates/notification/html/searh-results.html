@@ -1,0 +1,12 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Search Results
+{% endblock title %}
+
+{% block body %}
+<span>Results</span> <br />
+{% for user in results %}
+<a href="{% url 'notification:compose' user.user_name %}">{{user.user_name}}</a> <br /> <hr />
+{% endfor %}
+{% endblock body %}
