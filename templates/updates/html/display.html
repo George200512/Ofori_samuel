@@ -1,4 +1,5 @@
 {% extends "accounts/html/base.html" %}
+{% load updates %}
 
 {% block title %}
 My Updates
@@ -8,6 +9,7 @@ My Updates
 <a href="{% url 'updates:home' %}">Back</a>
 <span>{{user}}'s Updates</span> <br />
 {% for post in valid_posts %}
+{% only_comments post as comments %}
 <div>
 {{post.user}}<br /> 
 {% if post.expired %}
@@ -16,7 +18,7 @@ My Updates
 		Valid <br />
 		{% endif %}
 {{post.content}} <br />
-		<a href="{% url 'updates:comments' post.id %}">{{post.comments.all|length}} comments</a><br />
+		<a href="{% url 'updates:comments' post.id %}">{{comments|length}} comments</a><br />
 </div>
 <hr />
 {% endfor %}

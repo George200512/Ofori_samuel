@@ -1,0 +1,24 @@
+{% extends 'accounts/html/base.html' %}
+
+{% block title %}
+Replies
+{% endblock title %}
+
+{% block body %}
+<a href="{% url 'updates:show_replies_of_a_reply' parent_reply.id %}">Back</a>
+<span>Replies</span>
+{% for reply in replies %}
+<a href="{% url 'notification:compose' reply.from_user.user_name %}">{{request.from_user}}</a> <br />
+{{reply.text}}
+{% if reply.replies.all %}
+<a href="{% url 'updates:show_replies_of_a_reply' reply.id %}">
+  {{reply.replies.all|length}}Reply(ies)
+</a>
+{% else %}
+<a href="{% url 'updates:compose_replys_reply' reply.id %}">Reply</a>
+{% endif %}
+{% empty %}
+<a href="{% url 'updates:compose_replys_reply' reply.id %}">Be the first to reply.</a>
+{% endfor %}
+<a href="{% url 'updates:compose_replys_reply' reply.id %}">Click to reply.</a>
+{% endblock body %}

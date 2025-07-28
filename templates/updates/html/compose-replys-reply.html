@@ -1,0 +1,14 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Compose Reply
+{% endblock title %}
+
+{% block body %}
+<a href="{% url 'updates:show_replies_of_a_reply' p_reply.id %}">Back</a>
+<form action="{% url 'updates:compose_replys_reply' p_reply.id %}" method="post">
+  {% csrf_token %}
+  {{form}}
+  <input type="submit" value="Send" />
+</form>
+{% endblock body %}

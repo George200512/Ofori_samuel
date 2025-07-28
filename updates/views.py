@@ -3,10 +3,7 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.db.models.functions import Now
-<<<<<<< HEAD
-from django.views.generic import FormView
-=======
->>>>>>> e48fab8c5cf2e6a5d67df8b8e2fc3d8aa401390a
+from django.views.generic import FormView, ListView
 
 from accounts.models import User 
 from.models import Comment, Post, Viewer
@@ -224,15 +221,14 @@ class ShowCommentReplies(LoginRequiredMixin, View):
        """Get the comment with specified id and display the replies"""
        
        comment = Comment.objects.get(id=id)
-<<<<<<< HEAD
        return render(request, self.template_name, {"comment":comment})
        
        
-class PostReplyReply(FormView):
+class PostReplyReply(LoginRequiredMixin, FormView):
     """Compose and reply to the reply of a reply"""
     
     form_class = CommentForm  
-    template_name = "updates/show-replies.html"
+    template_name = "updates/compose-replys-reply.html"
     
     def form_valid(self, form):
         """Add the reply of the reply to the database"""
@@ -246,8 +242,43 @@ class PostReplyReply(FormView):
         reply.post  = parent_reply.post
         reply.save()
         parent_reply.replies.add(reply)
-        return 
+        return redirect("updates:show_replies_of_a_reply", id=id)
         
-=======
-       return render(request, self.template_name, {"comment":comment})
->>>>>>> e48fab8c5cf2e6a5d67df8b8e2fc3d8aa401390a
+    def get_context_data(self, **kwargs):
+        """Add extra data to the template"""
+        
+        context = self.get_context_data(**kwargs)
+        parent_reply = Comment.objects.get(id=self.kwargs["id"])
+        context["p_reply"] = parent_reply
+        try:
+            grandparent_reply = Comment.objects.get(replies_reply=parent_reply)
+            context["grandparent_reply"] = grandparent_reply
+            return context
+        except Comment.DoesNotExist :
+            return redirect("updates:comment_replies", id=id)
+        
+        
+class ShowRepliesOfAReply(LoginRequiredMixin, ListView):
+    """Show the replies of a reply"""
+    
+    model = Comment
+    template_name = "updates/html/show-replies-of-a-reply.html"
+    context_object_name = "replies"
+    
+    def get_queryset(self):
+        """Get the replies of a reply"""
+        
+        id = self.kwargs["id"]
+        reply = Comment.objects.get(id=id)
+        return reply.replies.all()
+        
+    def get_context_data(self, **kwargs):
+        """Add the reply that the reply is replying to"""
+        
+        reply = Comment.objects.get(id=self.kwargs["id"])
+        try:
+            parent_reply = Comment.objects.get(replies__reply=reply)
+            context["parent_reply"]  = parent_reply 
+            return context
+        except Comment.DoesNotExist:
+            return redirect("updates:comment_replies",  id=self.kwargs["id"])
