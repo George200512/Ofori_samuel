@@ -244,16 +244,20 @@ class PostReplyReply(LoginRequiredMixin, FormView):
         parent_reply.replies.add(reply)
         return redirect("updates:show_replies_of_a_reply", id=id)
         
+    def dispatch(self, request,*args, **kwargs):
+        """Get the needed items before dispatching the request to the appropriate
+        http method"""
+        
+        id = kwargs["id"]
+        self.parent_reply = Comment.objects.get(id=id)
+        return super().dispatch(request, *args, **kwargs)
+        
     def get_context_data(self, **kwargs):
         """Add extra data to the template"""
         
-        context = super().get_context_data(**kwargs)
-        parent_reply = Comment.objects.get(id=self.kwargs["id"])
-        context["p_reply"] = parent_reply
-        try:
-            return context
-        except Comment.DoesNotExist :
-            return redirect("updates:comment_replies", id=id)
+        context = super().get_context_data(**kwargs) 
+        context["p_reply"] = self.parent_reply
+        return context 
         
         
 class ShowRepliesOfAReply(LoginRequiredMixin, ListView):
