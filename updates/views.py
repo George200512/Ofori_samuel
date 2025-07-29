@@ -228,7 +228,7 @@ class PostReplyReply(LoginRequiredMixin, FormView):
     """Compose and reply to the reply of a reply"""
     
     form_class = CommentForm  
-    template_name = "updates/compose-replys-reply.html"
+    template_name = "updates/html/compose-replys-reply.html"
     
     def form_valid(self, form):
         """Add the reply of the reply to the database"""
@@ -247,12 +247,10 @@ class PostReplyReply(LoginRequiredMixin, FormView):
     def get_context_data(self, **kwargs):
         """Add extra data to the template"""
         
-        context = self.get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         parent_reply = Comment.objects.get(id=self.kwargs["id"])
         context["p_reply"] = parent_reply
         try:
-            grandparent_reply = Comment.objects.get(replies_reply=parent_reply)
-            context["grandparent_reply"] = grandparent_reply
             return context
         except Comment.DoesNotExist :
             return redirect("updates:comment_replies", id=id)
@@ -276,7 +274,9 @@ class ShowRepliesOfAReply(LoginRequiredMixin, ListView):
         """Add the reply that the reply is replying to"""
         
         reply = Comment.objects.get(id=self.kwargs["id"])
-        try:
+        context = super().get_context_data(**kwargs)
+        context["reply"] = reply
+        try:    
             parent_reply = Comment.objects.get(replies__reply=reply)
             context["parent_reply"]  = parent_reply 
             return context
