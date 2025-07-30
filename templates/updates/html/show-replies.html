@@ -12,6 +12,7 @@ Replies of a comment.
 {{reply.text}} <br />
 <a href="{% url 'updates:show_replies_of_a_reply' reply.id %}">{{reply.replies.all|length}}replies</a>
 {% empty %}
-<a href="{% url 'upddates:post_reply' comment.id %}">Be the first to reply.</a>
+<a href="{% url 'updates:post_reply' comment.id %}">Be the first to reply.</a> <br />
 {% endfor %}
+<a href="{% url 'updates:post_reply' comment.id %}">Reply as {{user}}</a>
 {% endblock body %}

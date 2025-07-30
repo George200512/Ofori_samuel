@@ -5,7 +5,8 @@ from.views import (
     AreYouSure, DeletePost, DisplayUpdates, EditPost ,
     PostComment, Reply,  ShowCommentReplies,
     PostReplyReply,PostComment, Reply,
-    ShowCommentReplies, ShowRepliesOfAReply
+    ShowCommentReplies, ShowRepliesOfAReply,
+    ShowRepliesOfAParentReply
     )
 
 app_name = "updates"
@@ -25,6 +26,6 @@ urlpatterns = [
     path("comment-reply-show/<int:id>", ShowCommentReplies. as_view(), name="comment_replies"), 
     path("reply/<int:id>/reply-compose/",  PostReplyReply. as_view(), name="compose_replys_reply"), 
     path("comment-reply-show/<int:id>", ShowCommentReplies. as_view(), name="comment_replies"),
-    path("reply/<int:id>/reply-show/", ShowRepliesOfAReply.as_view(), name="show_replies_of_a_reply")
-
+    path("reply/<int:id>/reply-show/", ShowRepliesOfAReply.as_view(), name="show_replies_of_a_reply"),
+    path("reply/<int:id>/reply-show/", ShowRepliesOfAParentReply.as_view(), name="show_replies_of_a_parent_reply")
 ]

@@ -5,6 +5,7 @@ Reply to comment.
 {% endblock title %}
 
 {% block body %}
+<a href="{% url 'updates:comments' comment.post.id %}">Back</a>
 <span>Reply to a comment.</span>
 <form action="{% url 'updates:post_reply' comment.id %}" method="post">
 		{% csrf_token %}
