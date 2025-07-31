@@ -283,42 +283,5 @@ class ShowRepliesOfAReply(LoginRequiredMixin, ListView):
         context["reply"] = reply 
         return context
         
-    #def dispatch(self, request, *args, **kwargs):
-#        """Determine which response to send back based on the http method"""
-#        
-#        try:
-#            id = self.kwargs["id"]
-#            self.parent_reply = Comment.objects.get(replies__reply_id=id)
-#            return super().dispatch(request, *args, **kwargs)
-#        except Comment.DoesNotExist:
-#            return redirect("updates:comment_replies", id=id)   
-            
-    
-#class ShowRepliesOfAParentReply(LoginRequiredMixin, ListView):
-#    """A class based view for getting the parent reply of the reply being displayed"""
-#    
-#    model = Comment
-#    template_name = "updates/html/show-replies-of-a-reply.html"
-#    context_object_name = "replies"
-#    
-#    def get_queryset(self):
-#        """Get the parent reply's replies  of the reply"""
-#        
-#        return self.reply.replies.all()
-#        
-#    def get_context_data(self, **kwargs):
-#        """Get the current reply """
-#        
-#        context = super().get_context_data(**kwargs)
-#        context["reply"] = Comment.objects.get(id=self.kwargs["id"])
-#        return context 
-#        
-#    #def dispatch(self, request, *args, **kwargs):
-#        """Determine which response to send back based on the http method"""
-#        
-#        try:
-#            id = self.kwargs["id"]
-#            self.reply = Comment.objects.get(replies__reply_id=id)
-#            return super().dispatch(request, *args, **kwargs)
-#        except Comment.DoesNotExist:
-#            return redirect("updates:comment_replies", id=id)
+  
+class   
