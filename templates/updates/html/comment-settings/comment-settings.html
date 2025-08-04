@@ -1,0 +1,12 @@
+{% extends "accounts/html/base.html" %}
+
+{% block title %}
+Comment Settings
+{f% endblock title %}
+
+{% block body %}
+<span>Comment Settings</span>
+<a href="{% url 'updates:comments' comment.post.id %}">Back</a> <br />
+<a href="{% url 'updates:edit_comment' comment.id %}">Edit</a> <br />
+<a href="{% url 'updates:approve_delete' comment.id %}">Delete</a>
+{% endblock body %}

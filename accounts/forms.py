@@ -167,7 +167,8 @@ class LoginForm(Form):
         
         regex = "^[a-zA-Z0-9_]{8,}"
         pattern = re.compile(regex)
-        username = self.cleaned_data["username"]
+        cleaned_data = super().clean()
+        username = cleaned_data["username"]
         if pattern.search(username):
             if User.objects.filter(user_name=username).first():
                 return username

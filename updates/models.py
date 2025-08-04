@@ -2,8 +2,7 @@ from django.db import models
 from django.utils import timezone 
 from datetime import timedelta 
 
-from accounts.models import User 
-from notification.models import Message 
+from accounts.models import User  
 
 # Create your models here.
 
@@ -30,9 +29,13 @@ class Post(models.Model):
         return comments
 
 
-class Comment(Message):
+class Comment(models.Model):
     """A class representing the comment model"""
     
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="my_comments", default=1)
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="received_comments", default=1)
+    text = models.TextField(default=None)
+    timestamp = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE,  related_name="comments")
     reply = models.ForeignKey("self", on_delete=models.CASCADE,  null=True,  blank=True,  related_name="replies")
     is_reply = models.BooleanField(default=False)

@@ -1,0 +1,12 @@
+{% extends "accounts/html/base.html" %}
+{% load updates %}
+
+{% block title %}
+Approve Delete
+{% endblock title %}
+
+{% block body %}
+<span>Delete comment ?</span>
+<a href="{% url 'updates:delete_comment' comment.id %}">Yes</a>
+<a href="{% url 'updates:comments' comment.post.id %}">No</a>
+{% endblock body %}

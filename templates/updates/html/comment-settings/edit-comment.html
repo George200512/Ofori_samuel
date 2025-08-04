@@ -1,0 +1,16 @@
+{% extends "accounts/html/base.html" %}
+{% load updates %}
+
+{% block title %}
+Edit Comment
+{% endblock title %}
+
+{% block body %}
+<span>Edit your comment</span>
+<a href="{% url 'updates:comments' comment.post.id %}">Back</a>
+<form action="{% url 'updates:edit_comment' comment.id %}" method="post">
+  {% csrf_token %}
+  {{form}}
+  <input type="submit" value="Save">
+</form>
+{% endblock body %}

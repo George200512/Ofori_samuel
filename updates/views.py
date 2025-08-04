@@ -3,7 +3,7 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.db.models.functions import Now
-from django.views.generic import FormView, ListView
+from django.views.generic import FormView, ListView, TemplateView
 
 from accounts.models import User 
 from.models import Comment, Post, Viewer
@@ -58,7 +58,7 @@ class Viewers(LoginRequiredMixin, View):
         """A method that handles handles get requests"""
         
         post = Post.objects.get(id=id)
-        return render(request, self.template_name, {"post":post})
+        return render(request, self.template_name, {"post":post, "user":request.user})
         
         
 class MakePost(LoginRequiredMixin, View):
@@ -95,7 +95,7 @@ class AreYouSure(LoginRequiredMixin, View):
         """A method that handles get requests """
         
         post = Post.objects.get(id=id)
-        return render(request, self.template_name, {"post": post})
+        return render(request, self.template_name, {"post": post, "user":request.user})
 
         
 class DeletePost(LoginRequiredMixin, View):
@@ -108,7 +108,7 @@ class DeletePost(LoginRequiredMixin, View):
         
         post = Post.objects.get(id=id)
         post.delete()
-        return render(request, self.template_name)
+        return render(request, self.template_name,  {"user":request.user})
                                                 
         
 class DisplayUpdates(LoginRequiredMixin, View):
@@ -123,7 +123,7 @@ class DisplayUpdates(LoginRequiredMixin, View):
         valid_posts = Post.objects.filter(user=user, expired=False)
         for post in valid_posts:
             Viewer.objects.get_or_create(user=request.user, post=post)
-        return render(request, self.template_name, {"valid_posts":valid_posts})
+        return render(request, self.template_name, {"valid_posts":valid_posts,  "user":request.user})
         
         
 class EditPost(LoginRequiredMixin, View):
@@ -137,7 +137,7 @@ class EditPost(LoginRequiredMixin, View):
         
         post = Post.objects.get(id=id)
         form = self.form_class(instance=post)
-        return render(request, self.template_name, {"form":form,  "post":post})
+        return render(request, self.template_name, {"form":form,  "post":post,  "user":request.user})
         
     def post(self, request, id):
         """Save the edited post to database"""
@@ -148,7 +148,7 @@ class EditPost(LoginRequiredMixin, View):
             post = form.save()
             post.save()
             return redirect("updates:your_updates")
-        return render(request, self.template_name, {"form":form, "post":post})
+        return render(request, self.template_name, {"form":form, "post":post,  "user":request.user})
         
         
 class PostComment(LoginRequiredMixin, View):
@@ -162,7 +162,7 @@ class PostComment(LoginRequiredMixin, View):
         
         form = self.form_class()
         post = Post.objects.get(id=id)
-        return render(request, self.template_name, {"form":form,  "post":post})
+        return render(request, self.template_name, {"form":form,  "post":post,  "user":request.user})
         
     def post(self, request, id):
         """Save comment to database"""
@@ -177,7 +177,7 @@ class PostComment(LoginRequiredMixin, View):
             comment.save()
             post.comments.add(comment)
             return redirect("updates:comments", id=id)
-        return render(request, self.template_name, {"form":form,  "post":post})
+        return render(request, self.template_name, {"form":form,  "post":post,  "user":request.user})
         
         
 class Reply(LoginRequiredMixin, View):
@@ -191,7 +191,7 @@ class Reply(LoginRequiredMixin, View):
         
         form = self.form_class()
         comment = Comment.objects.get(id=id)
-        return render(request, self.template_name, {"form":form,  "comment":comment})
+        return render(request, self.template_name, {"form":form,  "comment":comment,  "user":request.user})
         
     def post(self, request, id):
         """Save reply in database """
@@ -209,7 +209,7 @@ class Reply(LoginRequiredMixin, View):
             return redirect("updates:comment_replies", id=id)
         else:
             comment = Comment.objects.get(id=id)
-            return render(request, self.template_name, {"form":form,  "comment":comment})
+            return render(request, self.template_name, {"form":form,  "comment":comment,  "user":request.user})
             
             
 class ShowCommentReplies(LoginRequiredMixin, View):
@@ -284,4 +284,66 @@ class ShowRepliesOfAReply(LoginRequiredMixin, ListView):
         return context
         
   
-class   
+class EditComment(LoginRequiredMixin,  View):
+    """A view that allows you to edit a comment"""
+    
+    model = Comment 
+    template_name = "updates/html/comment-settings/edit-comment.html"
+    form_class = CommentForm 
+    
+    def get(self, request, id):
+        """Display the form to the user"""
+        
+        comment = Comment.objects.get(id=id)
+        form = self.form_class(instance=comment)
+        return render(request, self.template_name, {"user":request.user, "form":form,  "comment":comment})
+        
+    def post(self, request, id):
+        """Save the form to the database """
+        
+        comment = Comment.objects.get(id=id)
+        form = self.form_class(instance=comment, data=request.POST)
+        if form.is_valid():
+            edited_comment = form.save()
+            return redirect("updates:comments",  id=edited_comment.post.id)
+        return render(request, self.template_name, {"user": request.user, "form": form, "comment":comment})
+        
+ 
+class AreYouSureYouWantToDeleteComment(LoginRequiredMixin, View):
+    """A view that displays an html webppage asking if you want to
+    delete the comment"""
+    
+    template_name = "updates/html/comment-settings/are-you-sure-you-want-to-delete-comment.html"
+    
+    def get(self, request, id):
+        """A method that displays the webpage"""
+        
+        comment = Comment.objects.get(id=id)
+        return render(request,  self.template_name,  {"user": request.user,  "comment":comment})
+        
+      
+class DeleteComment(LoginRequiredMixin, View):
+    """Delete a comment """
+    
+    def get(self, request, id):
+        """A method to delete the comment"""
+        
+        post = Comment.objects.get(id=id).post
+        comment = Comment.objects.get(id=id)
+        comment.delete()
+        return redirect("updates:comments", id=post.id)
+        
+       
+class CommentSettings(LoginRequiredMixin, TemplateView):
+    """A view that displays the settings of a comment"""
+    
+    template_name = "updates/html/comment-settings/comment-settings.html"
+    
+    def get_context_data(self, **kwargs):
+        """Get the id of the comment"""
+        
+        id = self.kwargs["id"]
+        comment = Comment.objects.get(id=id)
+        context = super().get_context_data(**kwargs)
+        context["comment"] = comment 
+        return context 

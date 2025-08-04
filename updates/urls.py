@@ -6,6 +6,8 @@ from.views import (
     PostComment, Reply,  ShowCommentReplies,
     PostReplyReply,PostComment, Reply,
     ShowCommentReplies, ShowRepliesOfAReply,
+    EditComment, AreYouSureYouWantToDeleteComment,
+    DeleteComment, CommentSettings
     )
 
 app_name = "updates"
@@ -26,4 +28,8 @@ urlpatterns = [
     path("reply/<int:id>/reply-compose/",  PostReplyReply. as_view(), name="compose_replys_reply"), 
     path("comment-reply-show/<int:id>", ShowCommentReplies. as_view(), name="comment_replies"),
     path("reply/<int:id>/reply-show/", ShowRepliesOfAReply.as_view(), name="show_replies_of_a_reply"),
+    path("comment/settings/edit/<int:id>", EditComment. as_view(), name="edit_comment"),
+    path("comment/settings/are-you-sure/<int:id>", AreYouSureYouWantToDeleteComment.as_view(), name="approve_delete"), 
+    path("comment/settings/delete/<int:id>", DeleteComment. as_view(), name="delete_comment"),
+    path("comment/settings/<int:id>/", CommentSettings. as_view(), name="comment_settings")
 ]

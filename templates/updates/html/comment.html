@@ -11,12 +11,22 @@ Comments
 {% only_comments post as comments %}
 {% for comment in comments %}
 <div>
+		{% if comment.from_user == user %}
+		<a href="{% url 'updates:comment_settings' comment.id %}">
+				<div>
 		<a href="{% url 'notification:compose' comment.from_user.user_name %}">{{comment.from_user}}</a> <br />
-		{{comment.text}} <br />
+		{{comment.text}} 
+				</div>
+				{% else %}
+				<a href="{% url 'notification:compose' comment.from_user.user_name %}">{{comment.from_user}}</a> <br />
+		{{comment.text}}
+		</a>
+		{% endif %}
+				<br />
 		{% if comment.replies.all %}
 		<a href="{% url 'updates:comment_replies' comment.id %}">{{comment.replies.all|length}} replies </a><br />
 		{% else %}
-		<a href="{% url 'updates:post_reply' comment.id %}">Reply</a>
+				<a href="{% url 'updates:post_reply' comment.id %}">Reply</a>
 		{% endif %}
 		<hr />
 </div>
