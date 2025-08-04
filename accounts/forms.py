@@ -181,7 +181,7 @@ class LoginForm(Form):
         
         symbols = "".join(self.symbols)
         escape_symbols = re.escape("".join(self.symbols))
-        regex = f"^[a-zA-Z0-9{escape_symbols}]{{8,}}$"
+        regex = fr"^[a-zA-Z0-9{escape_symbols}]{{8,}}$"
         pattern = re.compile(regex)
         password = self.cleaned_data["password"]
         
@@ -198,10 +198,9 @@ class LoginForm(Form):
     def clean(self):
         """Validate all user input"""
         
-        cleaned_data = super().clean()
-        cleaned_data["password"] = cleaned_data["password"].strip()
-        password = cleaned_data["password"]
-        username = cleaned_data["username"]
+        self.cleaned_data["password"] = self.cleaned_data["password"].strip()
+        password = self.cleaned_data["password"]
+        username = self.cleaned_data["username"]
         user = User.objects.filter(user_name=username).first()
         if not check_password(password, user.password):
             raise forms.ValidationError("Invalid password entered.")
