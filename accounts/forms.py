@@ -167,12 +167,11 @@ class LoginForm(Form):
         
         regex = "^[a-zA-Z0-9_]{8,}"
         pattern = re.compile(regex)
-        cleaned_data = super().clean()
-        username = cleaned_data["username"]
+        username = self.cleaned_data["username"]
         if pattern.search(username):
             if User.objects.filter(user_name=username).first():
                 return username
-            raise forms.ValidationError("Username not found. ")            
+            raise forms.ValidationError("Invalid Credentials")            
         else:
             raise forms.ValidationError("User name must start with a an alphanumeric character.\n The only valid character is underscore. \nAtleast eight characters long")
             
@@ -196,11 +195,12 @@ class LoginForm(Form):
                 raise forms.ValidationError("Password does not match the pattern.")
                 
     def clean(self):
-        """Validate all user input"""
-        
-        self.cleaned_data["password"] = self.cleaned_data["password"].strip()
-        password = self.cleaned_data["password"]
-        username = self.cleaned_data["username"]
+        """ Validate all user input"""
+       
+        cleaned_data = super().clean()
+        cleaned_data["password"] = cleaned_data["password"].strip()
+        password = cleaned_data["password"]
+        username = cleaned_data["username"]
         user = User.objects.filter(user_name=username).first()
         if not check_password(password, user.password):
             raise forms.ValidationError("Invalid password entered.")
