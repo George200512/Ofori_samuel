@@ -115,13 +115,9 @@ class Login(View):
         
         form = self.login_form(request.POST)
         if form.is_valid():
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
-            user = authenticate(request, user_name=username, password=password)
-            if user:
-               login(request, user)
-               return redirect("accounts:profile", username=user.user_name)
-            return redirect("accounts:signup")
+            user = form.user
+            login(request, user)
+            return redirect("accounts:profile", username=user.user_name)
         return render(request, self.template_name, {"form":form})
         
 

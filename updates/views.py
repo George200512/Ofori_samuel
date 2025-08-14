@@ -347,3 +347,68 @@ class CommentSettings(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context["comment"] = comment 
         return context 
+        
+        
+class EditReply(LoginRequiredMixin,  View):
+    """A view that allows you to edit a reply"""
+    
+    model = Comment 
+    template_name = "updates/html/reply-settings/edit-reply.html"
+    form_class = CommentForm 
+    
+    def get(self, request, id):
+        """Display the form to the user"""
+        
+        reply = Comment.objects.get(id=id)
+        form = self.form_class(instance=reply)
+        return render(request, self.template_name, {"user":request.user, "form":form,  "reply":reply})
+        
+    def post(self, request, id):
+        """Save the form to the database """
+        
+        reply = Comment.objects.get(id=id)
+        form = self.form_class(instance=reply, data=request.POST)
+        if form.is_valid():
+            edited_reply = form.save()
+            return redirect("updates:comment_replies",  id=edited_reply.reply.id)
+        return render(request, self.template_name, {"user": request.user, "form": form, "reply":reply})
+        
+ 
+class AreYouSureYouWantToDeleteReply(LoginRequiredMixin, View):
+    """A view that displays an html webppage asking if you want to
+    delete the reply"""
+    
+    template_name = "updates/html/reply-settings/are-you-sure-you-want-to-delete-reply.html"
+    
+    def get(self, request, id):
+        """A method that displays the webpage"""
+        
+        reply = Comment.objects.get(id=id)
+        return render(request,  self.template_name,  {"user": request.user,  "reply":reply})
+        
+      
+class DeleteReply(LoginRequiredMixin, View):
+    """Delete a comment """
+    
+    def get(self, request, id):
+        """A method to delete the comment"""
+        
+        parent_reply = Comment.objects.get(id=id).reply
+        reply = Comment.objects.get(id=id)
+        reply.delete()
+        return redirect("updates:comment_replies", id=parent_reply.id)
+        
+       
+class ReplySettings(LoginRequiredMixin, TemplateView):
+    """A view that displays the settings of a comment"""
+    
+    template_name = "updates/html/reply-settings/reply-settings.html"
+    
+    def get_context_data(self, **kwargs):
+        """Get the id of the comment"""
+        
+        id = self.kwargs["id"]
+        reply = Comment.objects.get(id=id)
+        context = super().get_context_data(**kwargs)
+        context["reply"] = reply 
+        return context 

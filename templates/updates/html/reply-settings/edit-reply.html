@@ -2,13 +2,13 @@
 {% load updates %}
 
 {% block title %}
-Edit Comment
+Edit Reply
 {% endblock title %}
 
 {% block body %}
-<span>Edit your comment</span>
-<a href="{% url 'updates:comment_settings' comment.id %}">Back</a>
-<form action="{% url 'updates:edit_comment' comment.id %}" method="post">
+<span>Edit your reply</span>
+<a href="{#% url 'updates:comment_settings' comment.id %#}">Back</a>
+<form action="{% url 'updates:edit_reply' reply.id %}" method="post">
   {% csrf_token %}
   {{form}}
   <input type="submit" value="Save">

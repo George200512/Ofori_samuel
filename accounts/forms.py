@@ -3,6 +3,7 @@ from django.forms import ModelForm, Form
 import re
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.forms import SetPasswordForm, PasswordResetForm
+from django.contrib.auth import authenticate 
 
 from .models import User
                
@@ -165,13 +166,11 @@ class LoginForm(Form):
     def clean_username(self):
         """Check username """
         
-        regex = "^[a-zA-Z0-9_]{8,}"
+        regex = r"^[a-zA-Z0-9_]{8,}"
         pattern = re.compile(regex)
         username = self.cleaned_data["username"]
         if pattern.search(username):
-            if User.objects.filter(user_name=username).first():
-                return username
-            raise forms.ValidationError("Invalid Credentials")            
+            return username           
         else:
             raise forms.ValidationError("User name must start with a an alphanumeric character.\n The only valid character is underscore. \nAtleast eight characters long")
             
@@ -198,12 +197,17 @@ class LoginForm(Form):
         """ Validate all user input"""
        
         cleaned_data = super().clean()
-        cleaned_data["password"] = cleaned_data["password"].strip()
-        password = cleaned_data["password"]
-        username = cleaned_data["username"]
-        user = User.objects.filter(user_name=username).first()
-        if not check_password(password, user.password):
-            raise forms.ValidationError("Invalid password entered.")
+        username = cleaned_data.get("username")
+        password = self.cleaned_data.get("password")
+        if password:
+            cleaned_data["password"] = password
+           
+        if password and username:
+            user = authenticate(username=username, password=password)
+            if user is None:
+                raise forms.ValidationError("Invalid username or password ")
+            self.user = user
+            print(self.user)
         return cleaned_data 
         
 
